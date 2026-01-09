@@ -1,0 +1,60 @@
+# Project Roadmap: CarSellingApp
+
+## 🚨 Priority 0: Critical Fixes (Security & Stability)
+*Must be fixed immediately.*
+- [ ] **Fix Security Vulnerability (XSS)**
+    - [ ] `resources/views/car/show.blade.php`: Change `{!! ... !!}` to `{{ ... }}`.
+- [ ] **Fix Hardcoded Auth Logic**
+    - [ ] Remove `User::find(4)` from `CarController`.
+    - [ ] Ensure middleware protects routes (check if user is signed up before actions).
+- [ ] **Fix "My Cars" Crash**
+    - [ ] Change `get()` to `paginate()` in `CarController::index`.
+
+## 🔒 Priority 1: Authentication & User Management
+- [ ] **Fix Sign Up Functionality**
+    - [x] Add POST route/Controller.
+    - [ ] Fix validation logic.
+- [ ] **Fix Login Functionality**
+    - [ ] Validate credentials properly.
+    - [ ] Handle "Remember Me".
+- [ ] **Logout Feature**
+    - [ ] Create Logout Route.
+    - [ ] Ensure it redirects to Home/Login.
+
+## 🚗 Priority 2: Core Car Management (CRUD)
+- [ ] **"Add a Car" Feature (Detailed)**
+    - [ ] **Step 1: Form & Route:** Ensure 'Add Your Car' button on Home links to valid form.
+    - [ ] **Step 2: Controller Logic:** Create `store` method.
+    - [ ] **Step 3: Validation:** Rules for Year, Model, Price, etc.
+    - [ ] **Step 4: Image Upload:** Handle file storage.
+    - [ ] **Step 5: User Association:** Link car to logged-in user.
+- [ ] **"My Cars" Page**
+    - [ ] Fix Route & Controller.
+    - [ ] Display user's uploaded cars.
+    - [ ] Edit/Delete actions.
+- [ ] **Watchlist / Favorites**
+    - [ ] Fix 'Favorite Cars' route.
+    - [ ] **Toggle Logic:** AJAX/Form to add/remove.
+    - [ ] **Auth Check:** Ensure only logged-in users can favorite.
+- [ ] **Fix Badges & Specs**
+    - [ ] Ensure correct data display in Car Components.
+    - [ ] Fix "View Full Number" button.
+
+## 🔍 Priority 3: Search & Discovery
+- [ ] **Advanced Search (Detailed)**
+    - [ ] **Step 1: Filters:** Implement Make, Model, Type filtering in Controller.
+    - [ ] **Step 2: Sorting:** Implement Price (ASC/DESC), Date (ASC/DESC).
+    - [ ] **Step 3: UI Actions:** Fix 'Find the Car' button on Home.
+    - [ ] **Step 4: Reset Button:** Ensure "Reset" clears all filters.
+- [ ] **Pagination**
+    - [x] Search Results.
+    - [ ] Apply to Watchlist & My Cars.
+
+## 🧹 Priority 4: Code Quality & Polish
+- [ ] **Cleanup & Documentation**
+    - [ ] **Remove Dead Code:** Delete commented blocks in Controllers.
+    - [ ] **Add Comments:** Explain complex logic (e.g., search query builder).
+- [ ] **UI Refinement**
+    - [ ] **Global Footer:** Create & Implement.
+    - [ ] **Flash Messages:** Success/Error popups.
+    - [ ] **Mobile Responsiveness.**

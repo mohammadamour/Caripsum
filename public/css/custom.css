@@ -1,0 +1,10 @@
+.btn-heart-active svg {
+    fill: #ff4400;
+    color: #ff4400;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
