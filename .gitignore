@@ -21,3 +21,12 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+
+# Debug / scratch scripts (should never be committed)
+check_db.php
+check_images.php
+output.html
+task.md.resolved
+_ide_helper.php
+_ide_helper_models.php
+.phpstorm.meta.php

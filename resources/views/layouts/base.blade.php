@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>
             {{ $title ?? View::yieldContent('title', 'Home') }} |
-        Logoipsum
+        Caripsum
     </title>
-    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
-
+   
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -22,17 +22,14 @@
         integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
         crossorigin="anonymous"
         referrerpolicy="no-referrer" />
-    <!-- <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.1/flowbite.min.css"
-      rel="stylesheet"
-    /> -->
 
     <link rel="stylesheet" href="{{ asset("/css/app.css") }}" />
-    <!-- <link rel="stylesheet" href="css/output.css" /> -->
+    <style>
+        body { background-color: #eeeeee !important; color: #5c5c5c !important; }
+    </style>
 </head>
 
 <body class="{{ $cssClass ?? "" }}">
-    {{-- @yield('childContent') --}}
     {{ $slot }}
 
     @include('layouts.flash')
@@ -50,8 +47,6 @@
     <script src="{{ asset("/js/app.js") }}"></script>
     <script>
         function toggleFavorite(button, carId) {
-            // Determine logic based on class state or handle response
-            // Actually, let's just send the request
             const isGuest = '{{ auth()->check() ? "false" : "true" }}' === 'true';
             if (isGuest) {
                 window.location.href = '{{ route("login") }}';

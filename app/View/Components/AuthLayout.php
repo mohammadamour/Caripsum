@@ -24,13 +24,19 @@ class AuthLayout extends Component
     public bool $showHeader;
 
     /**
+     * Controls visibility of the global footer.
+     */
+    public bool $showFooter;
+
+    /**
      * Create a new component instance.
      */
-    public function __construct(?string $title = null, ?string $bodyClass = null, bool $showHeader = false)
+    public function __construct(?string $title = null, ?string $bodyClass = null, bool $showHeader = false, bool $showFooter = false)
     {
         $this->title = $title;
         $this->bodyClass = $bodyClass;
         $this->showHeader = $showHeader;
+        $this->showFooter = $showFooter;
     }
 
     /**

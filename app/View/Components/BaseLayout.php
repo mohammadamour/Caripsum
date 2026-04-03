@@ -8,17 +8,15 @@ use Illuminate\View\Component;
 
 class BaseLayout extends Component
 {
-    /**
-     * Optional CSS class applied to the <body> element.
-     */
-    public ?string $cssClass = null;
+    public ?string $cssClass;
+    public ?string $title;
+    public bool $showFooter;
 
-    /**
-     * Create a new component instance.
-     */
-    public function __construct(?string $cssClass = null)
+    public function __construct(?string $cssClass = null, ?string $title = null, bool $showFooter = true)
     {
         $this->cssClass = $cssClass;
+        $this->title = $title;
+        $this->showFooter = $showFooter;
     }
 
     /**

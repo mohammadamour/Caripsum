@@ -1,9 +1,4 @@
-@props([
-    'bodyClass' => null,
-    'footerLinks' => '',
-    'title' => '',
-])
-<x-base-layout :$title :$bodyClass :$footerLinks>
+<x-base-layout :title="$title" :css-class="$bodyClass">
     @if ($showHeader ?? true)
         @include("layouts.header")
     @endif

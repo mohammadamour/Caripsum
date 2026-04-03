@@ -6,9 +6,9 @@
 
 <x-base-layout
     :title="$title"
-    :cssClass="$bodyClass"
-    :showHeader="$showHeader"
-    :showFooter="false"
+    :css-class="$bodyClass"
+    :show-header="$showHeader"
+    :show-footer="$showFooter"
 >
     <main>
         <div class="container-small page-login">

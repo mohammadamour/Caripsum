@@ -1,7 +1,4 @@
 <x-app-layout>
-    <div class="container my-large">
-      <div class="success-message">Success message when something happens</div>
-    </div>
 
     <main>
       <div>

@@ -91,11 +91,9 @@ class CarController extends Controller
             'abs' => $request->has('abs'),
             'air_conditioning' => $request->has('air_conditioning'),
             'power_windows' => $request->has('power_windows'),
-            'power_doors_locks' => $request->has('power_doors_locks'),
+            'power_doors_locks' => $request->has('power_door_locks'),
             'cruise_control' => $request->has('cruise_control'),
-            'bluetooth-connectivity' => $request->has('bluetooth_connectivity'), // Note the mismatched dash/underscore in DB vs Form? DB has 'bluetooth-connectivity', Migration says 'bluetooth-connectivity'. 
-            // WAIT: DB column 'bluetooth-connectivity' usually errors in Eloquent accessors ($features->bluetooth-connectivity is math). 
-            // It needs array access or specific mapping. The migration used a dash.
+            'bluetooth-connectivity' => $request->has('bluetooth_connectivity'), 
             'remote_start' => $request->has('remote_start'),
             'gps_navigation' => $request->has('gps_navigation'),
             'heated_seats' => $request->has('heated_seats'),
@@ -113,17 +111,11 @@ class CarController extends Controller
         // 4. Handle Image Uploads
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $index => $image) {
-                // Store file public/img/cars/{car_id}/filename
-                $filename = time() . '_' . $index . '.' . $image->getClientOriginalExtension();
-                
-                // Use standard move to public/img/cars directory
-                $destinationPath = public_path("img/cars/{$car->id}");
-                $image->move($destinationPath, $filename);
-                $fullPath = "/img/cars/{$car->id}/{$filename}";
+                $path = $image->store("img/cars/{$car->id}", 'public');
 
                 CarImages::create([
                     'car_id' => $car->id,
-                    'image_path' => $fullPath,
+                    'image_path' => "/storage/" . $path,
                     'position' => $index + 1
                 ]);
             }
@@ -160,6 +152,10 @@ class CarController extends Controller
      */
     public function edit(Car $car)
     {
+        if ($car->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $makers = Maker::all();
         $carTypes = CarType::all();
         $fuelTypes = FuelType::all();
@@ -174,6 +170,10 @@ class CarController extends Controller
      */
     public function update(Request $request, Car $car)
     {
+        if ($car->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         // 1. Validate Form Data
         $validatedData = $request->validate([
             'maker_id' => 'required|exists:makers,id',
@@ -203,7 +203,7 @@ class CarController extends Controller
             'abs' => $request->has('abs'),
             'air_conditioning' => $request->has('air_conditioning'),
             'power_windows' => $request->has('power_windows'),
-            'power_doors_locks' => $request->has('power_doors_locks'),
+            'power_doors_locks' => $request->has('power_door_locks'),
             'cruise_control' => $request->has('cruise_control'),
             'bluetooth-connectivity' => $request->has('bluetooth_connectivity'), 
             'remote_start' => $request->has('remote_start'),
@@ -227,17 +227,11 @@ class CarController extends Controller
         if ($request->hasFile('images')) {
             $currentMaxPosition = $car->images()->max('position') ?? 0;
             foreach ($request->file('images') as $index => $image) {
-                $filename = time() . '_' . $index . '.' . $image->getClientOriginalExtension();
-                $destinationPath = public_path("img/cars/{$car->id}");
-                if (!file_exists($destinationPath)) {
-                    mkdir($destinationPath, 0777, true);
-                }
-                $image->move($destinationPath, $filename);
-                $fullPath = "/img/cars/{$car->id}/{$filename}";
+                $path = $image->store("img/cars/{$car->id}", 'public');
 
                 CarImages::create([
                     'car_id' => $car->id,
-                    'image_path' => $fullPath,
+                    'image_path' => "/storage/" . $path,
                     'position' => $currentMaxPosition + $index + 1
                 ]);
             }
@@ -284,7 +278,9 @@ class CarController extends Controller
 
         // Filter by State
         if ($request->filled('state_id')) {
-            $query->where('state_id', $request->state_id);
+            $query->whereHas('city', function($q) use ($request) {
+                $q->where('state_id', $request->state_id);
+            });
         }
 
         // Filter by Car Type

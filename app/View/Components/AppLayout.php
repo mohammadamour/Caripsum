@@ -8,23 +8,15 @@ use Illuminate\View\Component;
 
 class AppLayout extends Component
 {
-    /**
-     * Controls visibility of the global header/navbar.
-     */
     public bool $showHeader;
-
-    /**
-     * Optional page-specific <body> CSS class.
-     */
     public ?string $bodyClass;
+    public ?string $title;
 
-    /**
-     * Create a new component instance.
-     */
-    public function __construct(bool $showHeader = true, ?string $bodyClass = null)
+    public function __construct(bool $showHeader = true, ?string $bodyClass = null, ?string $title = null)
     {
         $this->showHeader = $showHeader;
         $this->bodyClass = $bodyClass;
+        $this->title = $title;
     }
 
     /**

@@ -10,7 +10,7 @@
                 value="{{ old("email") }}"
             />
             @error("email")
-                <div class="text-danger">{{ $message }}</div>
+                <div class="error-message">{{ $message }}</div>
             @enderror
         </div>
 
@@ -21,7 +21,7 @@
                 placeholder="Your Password"
             />
             @error("password")
-                <div class="text-danger">{{ $message }}</div>
+                <div class="error-message">{{ $message }}</div>
             @enderror
         </div>
 
@@ -40,10 +40,10 @@
                 type="text"
                 name="fname"
                 placeholder="First Name"
-                value="{{ old("first_name") }}"
+                value="{{ old("fname") }}"
             />
-            @error("first_name")
-                <div class="text-danger">{{ $message }}</div>
+            @error("fname")
+                <div class="error-message">{{ $message }}</div>
             @enderror
         </div>
 
@@ -52,10 +52,10 @@
                 type="text"
                 name="lname"
                 placeholder="Last Name"
-                value="{{ old("last_name") }}"
+                value="{{ old("lname") }}"
             />
-            @error("last_name")
-                <div class="text-danger">{{ $message }}</div>
+            @error("lname")
+                <div class="error-message">{{ $message }}</div>
             @enderror
         </div>
 
@@ -67,7 +67,7 @@
                 value="{{ old("phone") }}"
             />
             @error("phone")
-                <div class="text-danger">{{ $message }}</div>
+                <div class="error-message">{{ $message }}</div>
             @enderror
         </div>
 
