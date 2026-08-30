@@ -12,7 +12,7 @@ class CarFeatures extends Model
 
     public $timestamps = false;
 
-    protected $primaryKey = 'car_id'; 
+    protected $primaryKey = 'car_id';
 
     protected $fillable = [
         'abs',
@@ -29,10 +29,9 @@ class CarFeatures extends Model
         'leather_seats'
     ];
 
-    
-   public function car(): BelongsTo
-   {
-    return $this->belongsTo(Car::class);
-   }
-    
+
+    public function car(): BelongsTo
+    {
+        return $this->belongsTo(Car::class);
+    }
 }

@@ -9,16 +9,15 @@ use Illuminate\Database\Seeder;
 class LargeCarSeeder extends Seeder
 {
     /**
-     * Seed the application with 50 new cars for better search demonstration.
+     * Seed the application with a larger realistic catalog for browsing.
      */
     public function run(): void
     {
-        // Generate 50 cars, each with its own features and images (handled by factory configure)
         Car::factory()
-            ->count(500)
+            ->count(120)
             ->has(CarFeatures::factory(), 'features')
             ->create();
 
-        $this->command->info('Successfully seeded 500 new cars with random images and features!');
+        $this->command->info('Successfully seeded 120 realistic cars with external images and feature data.');
     }
 }
