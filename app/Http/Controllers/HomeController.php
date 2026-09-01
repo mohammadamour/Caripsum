@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 
 class HomeController extends Controller
@@ -27,7 +28,8 @@ class HomeController extends Controller
             ->limit(30)
             ->get();
 
-        $favIds = auth()->check() ? auth()->user()->favouriteCars()->pluck('car_id')->toArray() : [];
+        $user = Auth::user();
+        $favIds = $user ? $user->favouriteCars()->pluck('car_id')->toArray() : [];
 
         return view('index', ['cars' => $cars, 'favIds' => $favIds]);
     }
