@@ -13,6 +13,7 @@ use App\Models\State;
 use App\Models\CarFeatures;
 use App\Models\CarImages;
 use App\Models\Model;
+use Illuminate\Support\Facades\Auth;
 
 class CarController extends Controller
 {
@@ -21,21 +22,19 @@ class CarController extends Controller
      */
     public function index()
     {
- 
-        $cars = auth()->user()->cars()
+        if (!Auth::check()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $user = Auth::user();
+
+        $cars = $user->cars()
             ->with(['maker', 'model', 'city', 'carType', 'fuelType', 'primaryImage'])
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-            // $cars = User::find(1)
-            // ->cars()
-            // ->orderBy('created_at', 'desc')
-            // ->get();
+        $favIds = $user->favouriteCars()->pluck('car_id')->toArray();
 
-
-            
-            
-        $favIds = auth()->check() ? auth()->user()->favouriteCars()->pluck('car_id')->toArray() : [];
         return view('car.index', ['cars' => $cars, 'favIds' => $favIds]);
     }
 
@@ -78,7 +77,12 @@ class CarController extends Controller
         // 2. Create Car Record
         $car = new Car();
         $car->fill($validatedData);
-        $car->user_id = auth()->id();
+
+        if (!Auth::check()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $car->user_id = Auth::id();
         $car->published_at = $request->has('published') ? now() : null;
         $car->save();
 
@@ -147,7 +151,7 @@ class CarController extends Controller
      */
     public function edit(Car $car)
     {
-        if ($car->user_id !== auth()->id()) {
+        if (!Auth::check() || $car->user_id !== Auth::id()) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -164,7 +168,7 @@ class CarController extends Controller
      */
     public function update(Request $request, Car $car)
     {
-        if ($car->user_id !== auth()->id()) {
+        if (!Auth::check() || $car->user_id !== Auth::id()) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -239,7 +243,7 @@ class CarController extends Controller
      */
     public function destroy(Car $car)
     {
-        if ($car->user_id !== auth()->id()) {
+        if (!Auth::check() || $car->user_id !== Auth::id()) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -367,7 +371,7 @@ class CarController extends Controller
 
         $cars = $query->paginate(15)->appends($request->query());
 
-        $favIds = auth()->check() ? auth()->user()->favouriteCars()->pluck('car_id')->toArray() : [];
+        $favIds = Auth::check() ? Auth::user()->favouriteCars()->pluck('car_id')->toArray() : [];
 
         return view('car.search', [
             'cars' => $cars,
@@ -384,14 +388,17 @@ class CarController extends Controller
 
     public function watchlist()
     {
-        $user = auth()->user();
+        if (!Auth::check()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $user = Auth::user();
 
         $cars = $user
-        ->favouriteCars()
-        ->with(['maker', 'model', 'city', 'carType', 'fuelType', 'primaryImage'])
-        ->paginate(15);
-        
-        // Pass favIds just in case, though view sets it to true
+            ->favouriteCars()
+            ->with(['maker', 'model', 'city', 'carType', 'fuelType', 'primaryImage'])
+            ->paginate(15);
+
         $favIds = $cars->pluck('id')->toArray();
 
         return view('car.watchlist', ['cars' => $cars, 'favIds' => $favIds]);
@@ -399,12 +406,14 @@ class CarController extends Controller
 
     public function toggleWatchlist(Car $car)
     {
-        $user = auth()->user();
-        
-        // Toggle the relationship (attach if missing, detach if exists)
+        if (!Auth::check()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $user = Auth::user();
+
         $toggled = $user->favouriteCars()->toggle($car->id);
-        
-        // Return JSON response for AJAX
+
         return response()->json([
             'added' => count($toggled['attached']) > 0
         ]);
