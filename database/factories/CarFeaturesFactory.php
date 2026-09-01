@@ -20,15 +20,15 @@ class CarFeaturesFactory extends Factory
             'abs' => fake()->boolean(),
             'air_conditioning' => fake()->boolean(),
             'power_windows' => fake()->boolean(),
-            'power_doors_locks' => fake()->boolean(),
+            'power_door_locks' => fake()->boolean(),
             'cruise_control' => fake()->boolean(),
-            'bluetooth-connectivity' => fake()->boolean(),
+            'bluetooth_connectivity' => fake()->boolean(),
             'remote_start' => fake()->boolean(),
             'gps_navigation' => fake()->boolean(),
             'heated_seats' => fake()->boolean(),
             'climate_control' => fake()->boolean(),
             'rear_parking_sensors' => fake()->boolean(),
-            'leather_seats' => fake()->boolean()
+            'leather_seats' => fake()->boolean(),
         ];
     }
 }

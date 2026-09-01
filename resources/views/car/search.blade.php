@@ -25,10 +25,15 @@
                         <h2>Define your search criteria</h2>
                     </div>
 
-                    <select class="sort-dropdown">
-                        <option value="">Order By</option>
-                        <option value="price">Price Asc</option>
-                        <option value="-price">Price Desc</option>
+                    <select class="sort-dropdown" aria-label="Sort cars">
+                        <option value="newest" @selected(request('sort', 'newest') === 'newest')>Newest Listings</option>
+                        <option value="oldest" @selected(request('sort') === 'oldest')>Oldest Listings</option>
+                        <option value="price_asc" @selected(request('sort') === 'price_asc')>Price: Low to High</option>
+                        <option value="price_desc" @selected(request('sort') === 'price_desc')>Price: High to Low</option>
+                        <option value="year_desc" @selected(request('sort') === 'year_desc')>Year: Newest First</option>
+                        <option value="year_asc" @selected(request('sort') === 'year_asc')>Year: Oldest First</option>
+                        <option value="mileage_asc" @selected(request('sort') === 'mileage_asc')>Lowest Mileage</option>
+                        <option value="mileage_desc" @selected(request('sort') === 'mileage_desc')>Highest Mileage</option>
                     </select>
                 </div>
                 <div class="search-car-results-wrapper">
@@ -65,6 +70,10 @@
                             >
                                 <div class="find-a-car-inputs">
                                     <div class="form-group">
+                                        <label class="mb-medium">Search</label>
+                                        <input type="search" name="q" placeholder="Make, model, city, keyword" value="{{ request('q') }}" />
+                                    </div>
+                                    <div class="form-group">
                                         <label class="mb-medium">Maker</label>
                                         <select id="makerSelect" name="maker_id">
                                             <option value="">Maker</option>
@@ -94,26 +103,22 @@
                                     <div class="form-group">
                                         <label class="mb-medium">Year</label>
                                         <div class="flex gap-1">
-                                            <input type="number" placeholder="Year From" name="year_from" value="{{ request('year_from') }}" />
-                                            <input type="number" placeholder="Year To" name="year_to" value="{{ request('year_to') }}" />
+                                            <input type="number" placeholder="Year From" name="year_from" value="{{ request('year_from') }}" min="1990" />
+                                            <input type="number" placeholder="Year To" name="year_to" value="{{ request('year_to') }}" min="1990" />
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="mb-medium">Price</label>
                                         <div class="flex gap-1">
-                                            <input type="number" placeholder="Price From" name="price_from" value="{{ request('price_from') }}" />
-                                            <input type="number" placeholder="Price To" name="price_to" value="{{ request('price_to') }}" />
+                                            <input type="number" placeholder="Price From" name="price_from" value="{{ request('price_from') }}" min="0" />
+                                            <input type="number" placeholder="Price To" name="price_to" value="{{ request('price_to') }}" min="0" />
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="mb-medium">Mileage</label>
                                         <div class="flex gap-1">
-                                            <select name="mileage">
-                                                <option value="">Any Mileage</option>
-                                                @foreach([10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000, 150000, 200000] as $miles)
-                                                    <option value="{{ $miles }}" @selected(request('mileage') == $miles)>{{ number_format($miles) }} or less</option>
-                                                @endforeach
-                                            </select>
+                                            <input type="number" placeholder="Min miles" name="mileage_from" value="{{ request('mileage_from') }}" min="0" />
+                                            <input type="number" placeholder="Max miles" name="mileage_to" value="{{ request('mileage_to') }}" min="0" />
                                         </div>
                                     </div>
                                     <div class="form-group">

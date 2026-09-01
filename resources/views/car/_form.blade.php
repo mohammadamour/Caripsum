@@ -108,18 +108,6 @@
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
-                                    <label>State/Region</label>
-                                    <select name="state_id" id="stateSelect">
-                                        <option value="">State/Region</option>
-                                        @foreach($states as $state)
-                                            <option value="{{ $state->id }}"{{ old('state_id', $car->state_id ?? '') == $state->id ? 'selected' : '' }}>{{ $state->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('state_id')<p class="error-message">{{ $message }}</p>@enderror
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-group">
                                     <label>City</label>
                                     <select name="city_id" id="citySelect">
                                         <option value="">City</option>
@@ -132,7 +120,6 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col">
                             <div class="col">
                                 <div class="form-group">
                                     <label>Address</label>
@@ -206,7 +193,7 @@
                                             type="checkbox"
                                             name="bluetooth_connectivity"
                                             value="1"
-                                            {{ old('bluetooth_connectivity', $car->features?->{'bluetooth-connectivity'} ?? false) ? 'checked' : '' }}
+                                            {{ old('bluetooth_connectivity', $car->features?->bluetooth_connectivity ?? false) ? 'checked' : '' }}
                                         />
                                         Bluetooth Connectivity
                                     </label>

@@ -18,15 +18,15 @@ class CarFeatures extends Model
         'abs',
         'air_conditioning',
         'power_windows',
-        'power_doors_locks',
+        'power_door_locks',
         'cruise_control',
-        'bluetooth-connectivity',
+        'bluetooth_connectivity',
         'remote_start',
         'gps_navigation',
         'heated_seats',
         'climate_control',
         'rear_parking_sensors',
-        'leather_seats'
+        'leather_seats',
     ];
 
 

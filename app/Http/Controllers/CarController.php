@@ -47,10 +47,9 @@ class CarController extends Controller
         $makers = Maker::all();
         $carTypes = CarType::all();
         $fuelTypes = FuelType::all();
-        $states = State::all();
-        $cities = City::all(); // Ideally filtered by state via AJAX, but for now passing all
+        $cities = City::all();
 
-        return view('car.create', compact('makers', 'carTypes', 'fuelTypes', 'states', 'cities'));
+        return view('car.create', compact('makers', 'carTypes', 'fuelTypes', 'cities'));
     }
 
     /**
@@ -68,13 +67,12 @@ class CarController extends Controller
             'vin' => 'required|string|max:255',
             'mileage' => 'required|integer|min:0',
             'fuel_type_id' => 'required|exists:fuel_types,id',
-            'state_id' => 'required|exists:states,id',
             'city_id' => 'required|exists:cities,id',
             'address' => 'required|string|max:255',
             'phone' => 'required|string|max:45',
             'description' => 'nullable|string',
-            'published' => 'nullable|in:on,1', // Checkbox sends 'on' or nothing
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validate each image
+            'published' => 'nullable|in:on,1',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         // 2. Create Car Record
@@ -85,15 +83,13 @@ class CarController extends Controller
         $car->save();
 
         // 3. Create Car Features
-        // We can just create with all request data; non-matching keys are ignored by mass assignment if configured, 
-        // but explicit mapping is safer.
         $featuresData = [
             'abs' => $request->has('abs'),
             'air_conditioning' => $request->has('air_conditioning'),
             'power_windows' => $request->has('power_windows'),
-            'power_doors_locks' => $request->has('power_door_locks'),
+            'power_door_locks' => $request->has('power_door_locks'),
             'cruise_control' => $request->has('cruise_control'),
-            'bluetooth-connectivity' => $request->has('bluetooth_connectivity'), 
+            'bluetooth_connectivity' => $request->has('bluetooth_connectivity'),
             'remote_start' => $request->has('remote_start'),
             'gps_navigation' => $request->has('gps_navigation'),
             'heated_seats' => $request->has('heated_seats'),
@@ -101,8 +97,7 @@ class CarController extends Controller
             'rear_parking_sensors' => $request->has('rear_parking_sensors'),
             'leather_seats' => $request->has('leather_seats'),
         ];
-        
-        // Handle the dash in column name if necessary by creating manually or using array
+
         $features = new CarFeatures($featuresData);
         $features->car_id = $car->id;
         $features->save();
@@ -159,10 +154,9 @@ class CarController extends Controller
         $makers = Maker::all();
         $carTypes = CarType::all();
         $fuelTypes = FuelType::all();
-        $states = State::all();
         $cities = City::all();
 
-        return view('car.edit', compact('car', 'makers', 'carTypes', 'fuelTypes', 'states', 'cities'));
+        return view('car.edit', compact('car', 'makers', 'carTypes', 'fuelTypes', 'cities'));
     }
 
     /**
@@ -184,7 +178,6 @@ class CarController extends Controller
             'vin' => 'required|string|max:255',
             'mileage' => 'required|integer|min:0',
             'fuel_type_id' => 'required|exists:fuel_types,id',
-            'state_id' => 'required|exists:states,id',
             'city_id' => 'required|exists:cities,id',
             'address' => 'required|string|max:255',
             'phone' => 'required|string|max:45',
@@ -203,9 +196,9 @@ class CarController extends Controller
             'abs' => $request->has('abs'),
             'air_conditioning' => $request->has('air_conditioning'),
             'power_windows' => $request->has('power_windows'),
-            'power_doors_locks' => $request->has('power_door_locks'),
+            'power_door_locks' => $request->has('power_door_locks'),
             'cruise_control' => $request->has('cruise_control'),
-            'bluetooth-connectivity' => $request->has('bluetooth_connectivity'), 
+            'bluetooth_connectivity' => $request->has('bluetooth_connectivity'),
             'remote_start' => $request->has('remote_start'),
             'gps_navigation' => $request->has('gps_navigation'),
             'heated_seats' => $request->has('heated_seats'),
@@ -258,77 +251,113 @@ class CarController extends Controller
 
     public function search(Request $request)
     {
-        $query = Car::where('published_at', '<', now()) 
+        $query = Car::query()
+            ->whereNotNull('published_at')
+            ->where('published_at', '<', now())
             ->with(['maker', 'model', 'city', 'carType', 'fuelType', 'primaryImage']);
 
-        // Filter by Maker
+        if ($request->filled('q')) {
+            $term = trim($request->q);
+
+            $query->where(function ($searchQuery) use ($term) {
+                $searchQuery->whereHas('maker', function ($makerQuery) use ($term) {
+                    $makerQuery->where('name', 'like', "%{$term}%");
+                })
+                    ->orWhereHas('model', function ($modelQuery) use ($term) {
+                        $modelQuery->where('name', 'like', "%{$term}%");
+                    })
+                    ->orWhereHas('city', function ($cityQuery) use ($term) {
+                        $cityQuery->where('name', 'like', "%{$term}%");
+                    })
+                    ->orWhere('description', 'like', "%{$term}%")
+                    ->orWhere('address', 'like', "%{$term}%");
+            });
+        }
+
         if ($request->filled('maker_id')) {
             $query->where('maker_id', $request->maker_id);
         }
 
-        // Filter by Model
         if ($request->filled('model_id')) {
             $query->where('model_id', $request->model_id);
         }
 
-        // Filter by City
         if ($request->filled('city_id')) {
             $query->where('city_id', $request->city_id);
         }
 
-        // Filter by State
         if ($request->filled('state_id')) {
-            $query->whereHas('city', function($q) use ($request) {
-                $q->where('state_id', $request->state_id);
+            $query->whereHas('city', function ($cityQuery) use ($request) {
+                $cityQuery->where('state_id', $request->state_id);
             });
         }
 
-        // Filter by Car Type
         if ($request->filled('car_type_id')) {
             $query->where('car_type_id', $request->car_type_id);
         }
 
-        // Filter by Fuel Type
         if ($request->filled('fuel_type_id')) {
             $query->where('fuel_type_id', $request->fuel_type_id);
         }
 
-        // Filter by Year Range
         if ($request->filled('year_from')) {
             $query->where('year', '>=', $request->year_from);
         }
+
         if ($request->filled('year_to')) {
             $query->where('year', '<=', $request->year_to);
         }
 
-        // Filter by Price Range
         if ($request->filled('price_from')) {
             $query->where('price', '>=', $request->price_from);
         }
+
         if ($request->filled('price_to')) {
             $query->where('price', '<=', $request->price_to);
         }
-        
-        // Filter by Mileage
+
+        if ($request->filled('mileage_from')) {
+            $query->where('mileage', '>=', $request->mileage_from);
+        }
+
+        if ($request->filled('mileage_to')) {
+            $query->where('mileage', '<=', $request->mileage_to);
+        }
+
         if ($request->filled('mileage')) {
             $query->where('mileage', '<=', $request->mileage);
         }
 
-        // Sorting
-        if ($request->filled('sort')) {
-            $sort = $request->sort;
-            if ($sort === 'price') {
+        $sort = $request->get('sort', 'newest');
+
+        switch ($sort) {
+            case 'price_asc':
                 $query->orderBy('price', 'asc');
-            } elseif ($sort === '-price') {
+                break;
+            case 'price_desc':
                 $query->orderBy('price', 'desc');
-            } else {
+                break;
+            case 'year_asc':
+                $query->orderBy('year', 'asc');
+                break;
+            case 'year_desc':
+                $query->orderBy('year', 'desc');
+                break;
+            case 'mileage_asc':
+                $query->orderBy('mileage', 'asc');
+                break;
+            case 'mileage_desc':
+                $query->orderBy('mileage', 'desc');
+                break;
+            case 'oldest':
+                $query->orderBy('created_at', 'asc');
+                break;
+            case 'newest':
+            default:
                 $query->orderBy('created_at', 'desc');
-            }
-        } else {
-            $query->orderBy('created_at', 'desc');
+                break;
         }
 
-        // Get dropdown data for the view
         $makers = Maker::all();
         $carTypes = CarType::all();
         $fuelTypes = FuelType::all();
@@ -336,19 +365,20 @@ class CarController extends Controller
         $cities = City::all();
         $models = Model::all();
 
-        $cars = $query->paginate(15);
+        $cars = $query->paginate(15)->appends($request->query());
 
         $favIds = auth()->check() ? auth()->user()->favouriteCars()->pluck('car_id')->toArray() : [];
 
         return view('car.search', [
-            'cars' => $cars, 
+            'cars' => $cars,
             'makers' => $makers,
             'carTypes' => $carTypes,
             'models' => $models,
             'fuelTypes' => $fuelTypes,
             'states' => $states,
             'cities' => $cities,
-            'favIds' => $favIds
+            'favIds' => $favIds,
+            'sort' => $sort,
         ]);
     }
 

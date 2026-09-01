@@ -113,7 +113,7 @@
                                 Power Windows
                             </x-car-specification>
                             <x-car-specification
-                                :value="data_get($car->features, 'power_doors_locks') ?? data_get($car->features, 'power_door_locks')"
+                                :value="optional($car->features)->power_door_locks"
                             >
                                 Power Door Locks
                             </x-car-specification>
@@ -128,7 +128,7 @@
                                 Cruise Control
                             </x-car-specification>
                             <x-car-specification
-                                :value="data_get($car->features, 'bluetooth_connectivity') ?? data_get($car->features, 'bluetooth-connectivity')"
+                                :value="optional($car->features)->bluetooth_connectivity"
                             >
                                 Bluetooth Connectivity
                             </x-car-specification>
