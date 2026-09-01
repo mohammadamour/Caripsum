@@ -19,24 +19,16 @@ use Illuminate\Support\Facades\View;
 
 class HomeController extends Controller
 {
-    public function index(){
-
-
-        User::factory()
-            ->has(Car::factory()->count(5), 'favouriteCars')
-            ->create(); 
-
-   
- 
+    public function index()
+    {
         $cars = Car::where('published_at', '<', now())
-        ->with(['primaryImage', 'maker', 'model', 'city', 'carType', 'fuelType'])
-        ->orderBy('published_at', 'desc')
-        ->limit(30)
-        ->get();
-        
-        
-    
-        return view('index', ['cars' => $cars, 'favIds' => auth()->check() ? auth()->user()->favouriteCars()->pluck('car_id')->toArray() : []]);
-        
+            ->with(['primaryImage', 'maker', 'model', 'city', 'carType', 'fuelType'])
+            ->orderBy('published_at', 'desc')
+            ->limit(30)
+            ->get();
+
+        $favIds = auth()->check() ? auth()->user()->favouriteCars()->pluck('car_id')->toArray() : [];
+
+        return view('index', ['cars' => $cars, 'favIds' => $favIds]);
     }
 }

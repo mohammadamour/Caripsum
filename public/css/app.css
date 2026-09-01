@@ -111,12 +111,14 @@ hr {
 
 .row {
   display: flex;
+  flex-wrap: wrap;
   margin-left: -0.5rem;
   margin-right: -0.5rem;
 }
 
 .col {
-  flex: 1;
+  flex: 1 1 220px;
+  min-width: 0;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
 }
@@ -320,16 +322,26 @@ select:disabled {
 .form-group .inline-radio {
   display: inline-flex;
   align-items: center;
-  white-space: nowrap;
+  gap: 0.5rem;
+  white-space: normal;
   margin-bottom: 0;
   font-weight: normal;
+  min-height: 32px;
 }
 
 .form-group .checkbox {
   display: flex;
   align-items: center;
+  gap: 0.5rem;
   margin-bottom: 0.5rem;
   font-weight: normal;
+  min-height: 32px;
+}
+
+.form-option-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.5rem 1rem;
 }
 
 input:not([type="radio"]):not([type="checkbox"]):hover,

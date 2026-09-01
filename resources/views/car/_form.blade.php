@@ -48,9 +48,8 @@
                         </div>
                         <div class="form-group">
                             <label>Car Type</label>
-                            <div class="row">
+                            <div class="form-option-grid">
                                 @foreach($carTypes as $type)
-                                <div class="col">
                                     <label class="inline-radio">
                                         <input
                                             type="radio"
@@ -60,7 +59,6 @@
                                         />
                                         {{ $type->name }}
                                     </label>
-                                </div>
                                 @endforeach
                             </div>
                         </div>
@@ -89,9 +87,8 @@
                         </div>
                         <div class="form-group">
                             <label>Fuel Type</label>
-                            <div class="row">
+                            <div class="form-option-grid">
                                 @foreach($fuelTypes as $fuel)
-                                <div class="col">
                                     <label class="inline-radio">
                                         <input
                                             type="radio"
@@ -101,7 +98,6 @@
                                         />
                                         {{ $fuel->name }}
                                     </label>
-                                </div>
                                 @endforeach
                             </div>
                         </div>
@@ -138,126 +134,130 @@
                         <div class="form-group">
                             <div class="row">
                                 <div class="col">
-                                    <label class="checkbox">
-                                        <input
-                                            type="checkbox"
-                                            name="air_conditioning"
-                                            value="1"
-                                            {{ old('air_conditioning', $car->features?->air_conditioning ?? false) ? 'checked' : '' }}
-                                        />
-                                        Air Conditioning
-                                    </label>
+                                    <div class="form-option-grid">
+                                        <label class="checkbox">
+                                            <input
+                                                type="checkbox"
+                                                name="air_conditioning"
+                                                value="1"
+                                                {{ old('air_conditioning', $car->features?->air_conditioning ?? false) ? 'checked' : '' }}
+                                            />
+                                            Air Conditioning
+                                        </label>
 
-                                    <label class="checkbox">
-                                        <input
-                                            type="checkbox"
-                                            name="power_windows"
-                                            value="1"
-                                            {{ old('power_windows', $car->features?->power_windows ?? false) ? 'checked' : '' }}
-                                        />
-                                        Power Windows
-                                    </label>
+                                        <label class="checkbox">
+                                            <input
+                                                type="checkbox"
+                                                name="power_windows"
+                                                value="1"
+                                                {{ old('power_windows', $car->features?->power_windows ?? false) ? 'checked' : '' }}
+                                            />
+                                            Power Windows
+                                        </label>
 
-                                    <label class="checkbox">
-                                        <input
-                                            type="checkbox"
-                                            name="power_door_locks"
-                                            value="1"
-                                            {{ old('power_door_locks', $car->features?->power_door_locks ?? false) ? 'checked' : '' }}
-                                        />
-                                        Power Door Locks
-                                    </label>
+                                        <label class="checkbox">
+                                            <input
+                                                type="checkbox"
+                                                name="power_door_locks"
+                                                value="1"
+                                                {{ old('power_door_locks', $car->features?->power_door_locks ?? false) ? 'checked' : '' }}
+                                            />
+                                            Power Door Locks
+                                        </label>
 
-                                    <label class="checkbox">
-                                        <input
-                                            type="checkbox"
-                                            name="abs"
-                                            value="1"
-                                            {{ old('abs', $car->features?->abs ?? false) ? 'checked' : '' }}
-                                        />
-                                        ABS
-                                    </label>
+                                        <label class="checkbox">
+                                            <input
+                                                type="checkbox"
+                                                name="abs"
+                                                value="1"
+                                                {{ old('abs', $car->features?->abs ?? false) ? 'checked' : '' }}
+                                            />
+                                            ABS
+                                        </label>
 
-                                    <label class="checkbox">
-                                        <input
-                                            type="checkbox"
-                                            name="cruise_control"
-                                            value="1"
-                                            {{ old('cruise_control', $car->features?->cruise_control ?? false) ? 'checked' : '' }}
-                                        />
-                                        Cruise Control
-                                    </label>
+                                        <label class="checkbox">
+                                            <input
+                                                type="checkbox"
+                                                name="cruise_control"
+                                                value="1"
+                                                {{ old('cruise_control', $car->features?->cruise_control ?? false) ? 'checked' : '' }}
+                                            />
+                                            Cruise Control
+                                        </label>
 
-                                    <label class="checkbox">
-                                        <input
-                                            type="checkbox"
-                                            name="bluetooth_connectivity"
-                                            value="1"
-                                            {{ old('bluetooth_connectivity', $car->features?->bluetooth_connectivity ?? false) ? 'checked' : '' }}
-                                        />
-                                        Bluetooth Connectivity
-                                    </label>
+                                        <label class="checkbox">
+                                            <input
+                                                type="checkbox"
+                                                name="bluetooth_connectivity"
+                                                value="1"
+                                                {{ old('bluetooth_connectivity', $car->features?->bluetooth_connectivity ?? false) ? 'checked' : '' }}
+                                            />
+                                            Bluetooth Connectivity
+                                        </label>
+                                    </div>
                                 </div>
                                 <div class="col">
-                                    <label class="checkbox">
-                                        <input
-                                            type="checkbox"
-                                            name="remote_start"
-                                            value="1"
-                                            {{ old('remote_start', $car->features?->remote_start ?? false) ? 'checked' : '' }}
-                                        />
-                                        Remote Start
-                                    </label>
+                                    <div class="form-option-grid">
+                                        <label class="checkbox">
+                                            <input
+                                                type="checkbox"
+                                                name="remote_start"
+                                                value="1"
+                                                {{ old('remote_start', $car->features?->remote_start ?? false) ? 'checked' : '' }}
+                                            />
+                                            Remote Start
+                                        </label>
 
-                                    <label class="checkbox">
-                                        <input
-                                            type="checkbox"
-                                            name="gps_navigation"
-                                            value="1"
-                                            {{ old('gps_navigation', $car->features?->gps_navigation ?? false) ? 'checked' : '' }}
-                                        />
-                                        GPS Navigation System
-                                    </label>
+                                        <label class="checkbox">
+                                            <input
+                                                type="checkbox"
+                                                name="gps_navigation"
+                                                value="1"
+                                                {{ old('gps_navigation', $car->features?->gps_navigation ?? false) ? 'checked' : '' }}
+                                            />
+                                            GPS Navigation System
+                                        </label>
 
-                                    <label class="checkbox">
-                                        <input
-                                            type="checkbox"
-                                            name="heated_seats"
-                                            value="1"
-                                            {{ old('heated_seats', $car->features?->heated_seats ?? false) ? 'checked' : '' }}
-                                        />
-                                        Heated Seats
-                                    </label>
+                                        <label class="checkbox">
+                                            <input
+                                                type="checkbox"
+                                                name="heated_seats"
+                                                value="1"
+                                                {{ old('heated_seats', $car->features?->heated_seats ?? false) ? 'checked' : '' }}
+                                            />
+                                            Heated Seats
+                                        </label>
 
-                                    <label class="checkbox">
-                                        <input
-                                            type="checkbox"
-                                            name="climate_control"
-                                            value="1"
-                                            {{ old('climate_control', $car->features?->climate_control ?? false) ? 'checked' : '' }}
-                                        />
-                                        Climate Control
-                                    </label>
+                                        <label class="checkbox">
+                                            <input
+                                                type="checkbox"
+                                                name="climate_control"
+                                                value="1"
+                                                {{ old('climate_control', $car->features?->climate_control ?? false) ? 'checked' : '' }}
+                                            />
+                                            Climate Control
+                                        </label>
 
-                                    <label class="checkbox">
-                                        <input
-                                            type="checkbox"
-                                            name="rear_parking_sensors"
-                                            value="1"
-                                            {{ old('rear_parking_sensors', $car->features?->rear_parking_sensors ?? false) ? 'checked' : '' }}
-                                        />
-                                        Rear Parking Sensors
-                                    </label>
+                                        <label class="checkbox">
+                                            <input
+                                                type="checkbox"
+                                                name="rear_parking_sensors"
+                                                value="1"
+                                                {{ old('rear_parking_sensors', $car->features?->rear_parking_sensors ?? false) ? 'checked' : '' }}
+                                            />
+                                            Rear Parking Sensors
+                                        </label>
 
-                                    <label class="checkbox">
-                                        <input
-                                            type="checkbox"
-                                            name="leather_seats"
-                                            value="1"
-                                            {{ old('leather_seats', $car->features?->leather_seats ?? false) ? 'checked' : '' }}
-                                        />
-                                        Leather Seats
-                                    </label>
+                                        <label class="checkbox">
+                                            <input
+                                                type="checkbox"
+                                                name="leather_seats"
+                                                value="1"
+                                                {{ old('leather_seats', $car->features?->leather_seats ?? false) ? 'checked' : '' }}
+                                            />
+                                            Leather Seats
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
