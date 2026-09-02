@@ -19,13 +19,9 @@ RUN apt-get update && apt-get install -y \
 # Enable Apache mod_rewrite for Laravel routing
 RUN a2enmod rewrite
 
-# Configure Apache to serve from Laravel's /public directory
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
-
-# Configure custom port binding for cloud platforms (Render / Railway use $PORT)
-RUN sed -i 's/80/${PORT}/g' /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf
+# Copy custom Apache virtual host configuration
+COPY docker/apache-vhost.conf /etc/apache2/sites-available/000-default.conf
+RUN sed -i 's/Listen 80/Listen ${PORT}/' /etc/apache2/ports.conf
 ENV PORT=80
 
 # Install Composer from official image
