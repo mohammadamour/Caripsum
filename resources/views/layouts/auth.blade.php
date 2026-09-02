@@ -14,9 +14,9 @@
         <div class="container-small page-login">
             <div class="flex" style="gap: 5rem">
                 <div class="auth-page-form">
-                    <div class="text-center">
-                        <a href="/">
-                            <img src="/img/logoipsum-265.svg" alt="" />
+                    <div class="text-center" style="margin-bottom: 1.5rem;">
+                        <a href="/" style="text-decoration: none;">
+                            <x-logo />
                         </a>
                     </div>
                     <h1 class="auth-page-title">{{ $title }}</h1>
