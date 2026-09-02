@@ -23,10 +23,7 @@
         crossorigin="anonymous"
         referrerpolicy="no-referrer" />
 
-    <link rel="stylesheet" href="{{ asset("/css/app.css") }}" />
-    <style>
-        body { background-color: #eeeeee !important; color: #5c5c5c !important; }
-    </style>
+    <link rel="stylesheet" href="{{ asset('/css/app.css') }}" />
 </head>
 
 <body class="{{ $cssClass ?? "" }}">
