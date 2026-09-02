@@ -1,6 +1,6 @@
-# 🚗 Caripsum
+# 🚗 Motora
 
-Caripsum is a Laravel-based used-car marketplace demo built as a premium automotive portfolio project. It focuses on the browsing and listing experience: users can view listings, search/filter inventory, create and manage their own car ads, and save favourites through a streamlined frontend.
+Motora is a Laravel-based used-car marketplace demo built as a premium automotive portfolio project. It focuses on the browsing and listing experience: users can view listings, search/filter inventory, create and manage their own car ads, and save favourites through a streamlined frontend.
 
 This project is intentionally scoped as a polished demo app rather than a full production marketplace. The goal is to feel like a realistic premium automotive listing platform while staying maintainable and easy to understand.
 
@@ -292,6 +292,39 @@ npm run build
 cd C:\Users\somet\Downloads\Coding\Caripsum
 php artisan migrate:fresh --seed
 ```
+
+---
+
+## Automated testing suite
+
+Motora includes a comprehensive automated PHPUnit test suite covering the entire application lifecycle, schema data contracts, validation rules, authorization policies, and search algorithms.
+
+Tests run against an isolated in-memory SQLite database using Laravel's `RefreshDatabase` trait and disk fakes (`Storage::fake('public')`), ensuring rapid and non-destructive execution.
+
+### Running the tests
+
+Execute the complete test suite via Artisan:
+
+```bash
+php artisan test
+```
+
+Or invoke PHPUnit directly:
+
+```bash
+php vendor/phpunit/phpunit/phpunit
+```
+
+### Test suite structure
+
+| Test Class | Type | Coverage & Assertions |
+|---|---|---|
+| [`CarDataConsistencyTest`](file:///c:/Users/somet/Downloads/Coding/Caripsum/tests/Unit/CarDataConsistencyTest.php) | Unit | Verifies model `$fillable` contracts, confirms absence of legacy schema drift (`state_id`), and enforces canonical snake_case naming for vehicle features (`power_door_locks`, `bluetooth_connectivity`). |
+| [`AuthenticationTest`](file:///c:/Users/somet/Downloads/Coding/Caripsum/tests/Feature/AuthenticationTest.php) | Feature | Tests registration happy path, password hashing, validation rules (unique email/phone, password confirmation), login session regeneration, invalid credential handling, and logout. |
+| [`CarManagementTest`](file:///c:/Users/somet/Downloads/Coding/Caripsum/tests/Feature/CarManagementTest.php) | Feature | Covers complete CRUD lifecycle: listing creation with attributes and multi-image uploads, input validation & file limits (image types, 2MB max), owner update flow and image gallery appending, ownership authorization checks (403 Forbidden for non-owners), and soft deletion. |
+| [`CarSearchAndFilterTest`](file:///c:/Users/somet/Downloads/Coding/Caripsum/tests/Feature/CarSearchAndFilterTest.php) | Feature | Tests keyword search (`q`), multi-criteria filtering (maker, model, city, state, price/year ranges), sorting options (price asc/desc, year asc/desc, newest/oldest), and ensures unpublished or future-dated listings are excluded. |
+| [`WatchlistTest`](file:///c:/Users/somet/Downloads/Coding/Caripsum/tests/Feature/WatchlistTest.php) | Feature | Tests asynchronous AJAX toggle (`POST /car/{car}/watchlist`), database favorite pivot attachment/detachment, saved cars watchlist page rendering, and guest access redirection. |
+
 
 ---
 

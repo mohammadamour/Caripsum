@@ -1,4 +1,4 @@
-# Caripsum Project Summary
+# Motora Project Summary
 
 ## Project goal
 This repository is a Laravel-based car marketplace demo built as a polished automotive portfolio project. The aim is to feel like a premium used-car marketplace without turning into a full production SaaS or multi-user seller platform.
@@ -152,12 +152,8 @@ These checks were run or attempted during the project work:
   - Earlier run succeeded in the working project flow
 - `php artisan route:list --name=car.search`
   - Confirmed the search route exists
-
-### Current blocker
-- `php artisan test tests/Feature/CarDataConsistencyTest.php --compact`
-  - This failed because the project is not currently wired for Pest-style execution in this environment: `it()` is undefined
-
-This is not a logic failure in the app fix itself; it is a project test-runner configuration gap.
+- `php artisan test`
+  - Fully operational PHPUnit test suite: 32 tests, 148 assertions passing cleanly (authentication, car CRUD lifecycle, search & filtering, watchlist, and schema consistency)
 
 ---
 

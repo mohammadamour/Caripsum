@@ -8,7 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>
             {{ $title ?? View::yieldContent('title', 'Home') }} |
-        Caripsum
+        Motora
     </title>
    
     <link rel="preconnect" href="https://fonts.googleapis.com" />
