@@ -291,6 +291,38 @@ php artisan migrate:fresh --seed
 
 ---
 
+## Deployment guide (Render & Railway)
+
+Motora is fully containerized and pre-configured for 1-click cloud deployment.
+
+### Option 1: Deploy on Render (Recommended)
+
+1. Push your code to your GitHub repository (`git push origin main`).
+2. Go to [Render.com](https://render.com/) and create a free account.
+3. Click **New +** &rarr; **Blueprint** (or **Web Service**).
+4. Connect your GitHub repository (`mohammadamour/Caripsum`).
+5. Render will automatically detect [`render.yaml`](file:///c:/Users/somet/Downloads/Coding/Caripsum/render.yaml) and [`Dockerfile`](file:///c:/Users/somet/Downloads/Coding/Caripsum/Dockerfile):
+   - **Environment**: Docker
+   - **Plan**: Free
+6. Click **Apply / Deploy**. Render will build the container, generate `APP_KEY`, run migrations, seed initial demo catalog data, and provide a live `https://motora.onrender.com` URL.
+
+### Option 2: Deploy on Railway
+
+1. Go to [Railway.app](https://railway.app/) and log in with GitHub.
+2. Click **New Project** &rarr; **Deploy from GitHub repo**.
+3. Select your repository.
+4. Add the following Environment Variables in the Railway Dashboard:
+   - `APP_NAME=Motora`
+   - `APP_ENV=production`
+   - `APP_DEBUG=false`
+   - `APP_KEY=base64:...` *(generate with `php artisan key:generate --show`)*
+   - `DB_CONNECTION=sqlite`
+   - `DB_DATABASE=/var/www/html/database/database.sqlite`
+5. Railway will automatically build and deploy the container.
+
+
+---
+
 ## Automated testing suite
 
 Motora includes a comprehensive automated PHPUnit test suite covering the entire application lifecycle, schema data contracts, validation rules, authorization policies, and search algorithms.

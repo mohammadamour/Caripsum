@@ -1,0 +1,14 @@
+.git
+.github
+node_modules
+vendor
+.phpunit.cache
+.env
+.env.backup
+.env.production
+storage/*.key
+storage/pail
+tests
+_ide_helper.php
+_ide_helper_models.php
+.phpstorm.meta.php
