@@ -278,13 +278,9 @@ Then open:
 http://127.0.0.1:8001
 ```
 
-### Rebuild frontend assets
+### Frontend assets architecture
 
-```bash
-cd C:\Users\somet\Downloads\Coding\Caripsum
-npm install
-npm run build
-```
+The application uses pure, pre-bundled Vanilla CSS and JavaScript located directly in `public/css/app.css` and `public/js/app.js`. All design tokens, responsive layouts, and interactions are self-contained, meaning zero Node.js / Vite build steps are required during production deployment.
 
 ### Re-seed the database
 
