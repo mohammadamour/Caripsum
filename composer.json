@@ -8,7 +8,7 @@
     "require": {
         "php": "^8.2",
         "doctrine/dbal": "^4.3",
-        "fakerphp/faker": "^1.23",
+        "fakerphp/faker": "^1.24",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1"
     },
