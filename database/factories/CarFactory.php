@@ -58,9 +58,9 @@ class CarFactory extends Factory
                 $user = User::find($attributes['user_id']);
                 return $user ? $user->phone : fake()->phoneNumber();
             },
-            'description' =>fake()->text(20000),
-            'published_at' =>fake()->optional(0.9)
-            ->dateTimeBetween('-1 month', '+1 day')
+            'description' => fake()->paragraphs(2, true),
+            'published_at' => fake()->optional(0.9)
+                ->dateTimeBetween('-1 month', '+1 day')
 
         ];
     }

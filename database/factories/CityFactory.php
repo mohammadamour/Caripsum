@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\State;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,9 @@ class CityFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->city()
+            'name' => fake()->city(),
+            'state_id' => State::query()->inRandomOrder()->value('id')
+                ?? State::factory()->create()->id,
         ];
     }
 }

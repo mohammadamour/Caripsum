@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Maker;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -24,7 +25,9 @@ class ModelFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->word()
+            'name' => fake()->word(),
+            'maker_id' => Maker::query()->inRandomOrder()->value('id')
+                ?? Maker::factory()->create()->id,
         ];
     }
 }
