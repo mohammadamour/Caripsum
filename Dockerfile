@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Enable Apache mod_rewrite for Laravel routing
-RUN a2enmod rewrite
+RUN a2enmod rewrite && echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 # Copy custom Apache virtual host configuration
 COPY docker/apache-vhost.conf /etc/apache2/sites-available/000-default.conf

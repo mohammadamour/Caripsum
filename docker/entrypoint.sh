@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# Ensure storage directories exist
+# Ensure storage & database directories exist
 mkdir -p /var/www/html/storage/app/public \
          /var/www/html/storage/framework/cache/data \
          /var/www/html/storage/framework/sessions \
@@ -11,26 +11,44 @@ mkdir -p /var/www/html/storage/app/public \
          /var/www/html/database
 
 # Ensure SQLite file exists
-if [ "${DB_CONNECTION:-sqlite}" = "sqlite" ]; then
-    if [ ! -f /var/www/html/database/database.sqlite ]; then
-        touch /var/www/html/database/database.sqlite
-    fi
+if [ ! -f /var/www/html/database/database.sqlite ]; then
+    touch /var/www/html/database/database.sqlite
 fi
 
-# Ensure valid base64 APP_KEY is present
+# Ensure valid base64 APP_KEY is generated if missing
 if [[ -z "$APP_KEY" || "$APP_KEY" != base64:* ]]; then
-    echo "Generating and exporting valid Laravel base64 APP_KEY..."
+    echo "Generating valid Laravel base64 APP_KEY..."
     export APP_KEY=$(php -r 'echo "base64:" . base64_encode(random_bytes(32));')
+fi
+
+# Create a baseline runtime .env if one does not exist
+if [ ! -f /var/www/html/.env ]; then
+    cat << EOF > /var/www/html/.env
+APP_NAME=Motora
+APP_ENV=${APP_ENV:-production}
+APP_DEBUG=${APP_DEBUG:-false}
+APP_KEY=${APP_KEY}
+APP_URL=${APP_URL:-http://localhost}
+DB_CONNECTION=sqlite
+DB_DATABASE=/var/www/html/database/database.sqlite
+SESSION_DRIVER=file
+CACHE_STORE=file
+QUEUE_CONNECTION=sync
+LOG_CHANNEL=stderr
+EOF
 fi
 
 # Ensure storage symlink exists
 php artisan storage:link || true
 
-# Run database migrations and seed catalog
-php artisan migrate --force || true
-php artisan db:seed --force || true
+# Run database migrations and seed demo cars
+echo "Running migrations..."
+php artisan migrate --force
 
-# Clear and rebuild production optimizations
+echo "Seeding demo catalog..."
+php artisan db:seed --force
+
+# Cache configuration, routes, and views for production speed
 php artisan config:cache || true
 php artisan route:cache || true
 php artisan view:cache || true
